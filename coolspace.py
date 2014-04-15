@@ -13,14 +13,18 @@ SESSION.headers = {'User-Agent': 'https://github.com/dnet/coolspace'}
 def gen_temperatures():
     apidir = SESSION.get('http://spaceapi.net/directory.json?api=0.13').json()
     for url in sorted(apidir.itervalues()):
-        api_data = SESSION.get(url).json()
-        for temperature in api_data.get('sensors', {}).get('temperature', []):
-            temperature['space'] = api_data['space']
-            temperature['value'] = float(temperature['value'])
-            name = temperature.get('name')
-            if name is not None:
-                temperature['location'] += ' ({0})'.format(name)
-            yield temperature
+        try:
+            api_data = SESSION.get(url).json()
+        except IOError:
+            pass
+        else:
+            for temperature in api_data.get('sensors', {}).get('temperature', []):
+                temperature['space'] = api_data['space']
+                temperature['value'] = float(temperature['value'])
+                name = temperature.get('name')
+                if name is not None:
+                    temperature['location'] += ' ({0})'.format(name)
+                yield temperature
 
 def gen_temps():
     temps = sorted(gen_temperatures(), key=itemgetter('value'), reverse=True)

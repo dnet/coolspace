@@ -35,8 +35,9 @@ def gen_temps():
 
     for temp in temps:
         gauge = '=' * int(temp['value'] * 2)
-        yield '   '.join(unicode(temp.get(k, '')).ljust(lengths[k])
+        row = '   '.join(unicode(temp.get(k, '')).ljust(lengths[k])
             for k in ('space', 'location', 'value')) + '   ' + gauge
+        yield row.encode('utf-8')
 
 if __name__ == '__main__':
     print(os.linesep.join(gen_temps()))

@@ -20,7 +20,12 @@ def gen_temperatures():
         else:
             for temperature in api_data.get('sensors', {}).get('temperature', []):
                 temperature['space'] = api_data['space']
-                temperature['value'] = float(temperature['value'])
+                try:
+                    temperature['value'] = float(temperature['value'])
+                except ValueError:
+                    from sys import stderr
+                    print('Invalid temperature: {0} (URL: {1})'.format(repr(temperature), url), file=stderr)
+                    continue
                 name = temperature.get('name')
                 if name is not None:
                     temperature['location'] += ' ({0})'.format(name)

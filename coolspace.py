@@ -26,6 +26,8 @@ def gen_temperatures():
                     from sys import stderr
                     print('Invalid temperature: {0} (URL: {1})'.format(repr(temperature), url), file=stderr)
                     continue
+                if temperature['unit'] == u"\u00b0F":
+                    temperature['value'] = (temperature['value'] - 32) * 5 / 9
                 name = temperature.get('name')
                 if name is not None:
                     temperature['location'] += ' ({0})'.format(name)

@@ -11,7 +11,7 @@ SESSION.verify = False
 SESSION.headers = {'User-Agent': 'https://github.com/dnet/coolspace'}
 
 def gen_temperatures():
-    apidir = SESSION.get('http://spaceapi.net/directory.json?api=0.13').json()
+    apidir = SESSION.get('http://spaceapi.net/directory.json?filter=sensors').json()
     for url in sorted(apidir.itervalues()):
         try:
             api_data = SESSION.get(url).json()
@@ -34,6 +34,18 @@ def gen_temperatures():
                 yield temperature
 
 def parse_temps(api_data):
+    version = api_data['api']
+    if version == '0.12':
+        sensors = api_data.get('sensors')
+        if not sensors:
+            return
+        if isinstance(sensors, list):
+            sensors = sensors[0]
+        for key, value in sensors.iteritems():
+            if key.startswith('temp'):
+                for tk, tv in value.iteritems():
+                    yield {'location': tk, 'value': tv[:-1], 'unit': tv[-1]}
+    elif version == '0.13':
         for temperature in api_data.get('sensors', {}).get('temperature', []):
             yield temperature
 

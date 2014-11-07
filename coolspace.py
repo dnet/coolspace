@@ -18,7 +18,7 @@ def gen_temperatures():
         except IOError:
             pass
         else:
-            for temperature in api_data.get('sensors', {}).get('temperature', []):
+            for temperature in parse_temps(api_data):
                 temperature['space'] = api_data['space']
                 try:
                     temperature['value'] = float(temperature['value'])
@@ -32,6 +32,10 @@ def gen_temperatures():
                 if name is not None:
                     temperature['location'] += ' ({0})'.format(name)
                 yield temperature
+
+def parse_temps(api_data):
+        for temperature in api_data.get('sensors', {}).get('temperature', []):
+            yield temperature
 
 def gen_temps():
     temps = sorted(gen_temperatures(), key=itemgetter('value'), reverse=True)

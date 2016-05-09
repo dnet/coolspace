@@ -11,7 +11,7 @@ SESSION.verify = False
 SESSION.headers = {'User-Agent': 'https://github.com/dnet/coolspace'}
 
 def gen_temperatures():
-    apidir = SESSION.get('http://spaceapi.net/directory.json?filter=sensors').json()
+    apidir = SESSION.get('https://spaceapi.fixme.ch/directory.json').json()
     for url in sorted(apidir.itervalues()):
         try:
             api_data = SESSION.get(url).json()

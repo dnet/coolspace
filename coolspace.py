@@ -42,7 +42,7 @@ def parse_temps(api_data):
         if isinstance(sensors, list):
             sensors = sensors[0]
         for key, value in sensors.iteritems():
-            if key.startswith('temp'):
+            if key.startswith('temp') and value:
                 for tk, tv in value.iteritems():
                     yield {'location': tk, 'value': tv[:-1], 'unit': tv[-1]}
     elif version == '0.13':

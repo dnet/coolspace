@@ -22,7 +22,7 @@ def gen_temperatures():
                 temperature['space'] = api_data['space']
                 try:
                     temperature['value'] = float(temperature['value'])
-                except ValueError:
+                except (ValueError, TypeError):
                     from sys import stderr
                     print('Invalid temperature: {0} (URL: {1})'.format(repr(temperature), url), file=stderr)
                     continue

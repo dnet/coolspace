@@ -37,7 +37,7 @@ gen_temperatures() ->
 recv_loop(Temps) ->
 	receive
 		Data -> recv_loop([Data | Temps])
-	after 5000 -> Temps end.
+	after 30000 -> Temps end.
 
 process_space(Name, URL) ->
 	spawn(?MODULE, process_space, [self(), Name, URL]).
